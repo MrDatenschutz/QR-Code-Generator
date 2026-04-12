@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Nexora – QR-Code Generator</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #38bdf8;
+      margin-bottom: 20px;
+    }
+
+    .box {
+      background: #020617;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 25px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #4b5563;
+      outline: none;
+      background: #020617;
+      color: #e5e7eb;
+      box-sizing: border-box;
+    }
+
+    input[type="text"]:focus {
+      border-color: #38bdf8;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #38bdf8;
+      color: #000;
+      font-weight: bold;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+
+    .qr-preview {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .qr-preview img {
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: #38bdf8;
+      color: #000;
+      font-weight: bold;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background: #0ea5e9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Nexora – QR-Code Generator</h1>
+
+  <div class="box">
+    <label for="qrInput">Text oder URL für den QR-Code:</label>
+    <input type="text" id="qrInput" placeholder="z.B. https://mrdatenschutz.github.io/Nexora/">
+
+    <button id="generateBtn">QR-Code erstellen</button>
+
+    <div class="qr-preview" id="qrPreview">
+      <!-- Hier erscheint der QR-Code -->
+    </div>
+  </div>
+
+  <a href="index.html" class="back-btn">Zur Startseite</a>
+
+  <script>
+    const input = document.getElementById('qrInput');
+    const btn = document.getElementById('generateBtn');
+    const preview = document.getElementById('qrPreview');
+
+    btn.addEventListener('click', () => {
+      const value = input.value.trim();
+      if (!value) {
+        preview.innerHTML = "<p>Bitte zuerst einen Text oder eine URL eingeben.</p>";
+        return;
+      }
+
+      const encoded = encodeURIComponent(value);
+      const url = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encoded}`;
+
+      preview.innerHTML = `
+        <p>Dein QR-Code:</p>
+        <img src="${url}" alt="QR-Code">
+      `;
+    });
+  </script>
+
+</body>
+</html>
