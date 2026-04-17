@@ -105,7 +105,6 @@
 
     <div class="qr-preview" id="qrPreview"></div>
 
-    <!-- NEUER DOWNLOAD BUTTON -->
     <button id="downloadBtn" style="display:none;">QR-Code herunterladen</button>
   </div>
 
@@ -140,13 +139,23 @@
       downloadBtn.style.display = "inline-block";
     });
 
-    downloadBtn.addEventListener('click', () => {
+    downloadBtn.addEventListener('click', async () => {
       if (!lastQRUrl) return;
 
+      // Bild als Blob herunterladen
+      const response = await fetch(lastQRUrl);
+      const blob = await response.blob();
+
+      // Download-Link erzeugen
       const link = document.createElement('a');
-      link.href = lastQRUrl;
+      link.href = URL.createObjectURL(blob);
       link.download = "qr-code.png";
+
+      // Download auslösen
       link.click();
+
+      // Speicher freigeben
+      URL.revokeObjectURL(link.href);
     });
   </script>
 
