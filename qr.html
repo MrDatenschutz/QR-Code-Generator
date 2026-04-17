@@ -103,9 +103,10 @@
 
     <button id="generateBtn">QR-Code erstellen</button>
 
-    <div class="qr-preview" id="qrPreview">
-      <!-- Hier erscheint der QR-Code -->
-    </div>
+    <div class="qr-preview" id="qrPreview"></div>
+
+    <!-- NEUER DOWNLOAD BUTTON -->
+    <button id="downloadBtn" style="display:none;">QR-Code herunterladen</button>
   </div>
 
   <a href="https://mrdatenschutz.github.io/Nexora/index.html" class="back-btn">Zur Startseite</a>
@@ -114,21 +115,38 @@
     const input = document.getElementById('qrInput');
     const btn = document.getElementById('generateBtn');
     const preview = document.getElementById('qrPreview');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let lastQRUrl = null;
 
     btn.addEventListener('click', () => {
       const value = input.value.trim();
       if (!value) {
         preview.innerHTML = "<p>Bitte zuerst einen Text oder eine URL eingeben.</p>";
+        downloadBtn.style.display = "none";
         return;
       }
 
       const encoded = encodeURIComponent(value);
       const url = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encoded}`;
 
+      lastQRUrl = url;
+
       preview.innerHTML = `
         <p>Dein QR-Code:</p>
-        <img src="${url}" alt="QR-Code">
+        <img id="qrImage" src="${url}" alt="QR-Code">
       `;
+
+      downloadBtn.style.display = "inline-block";
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      if (!lastQRUrl) return;
+
+      const link = document.createElement('a');
+      link.href = lastQRUrl;
+      link.download = "qr-code.png";
+      link.click();
     });
   </script>
 
